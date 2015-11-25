@@ -3,6 +3,7 @@ package entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,12 +22,11 @@ public class Role implements Serializable {
   @Id
   private String roleName ;
 
+  public Role() {}
   public Role(String roleName) {
     this.roleName = roleName;
   }
 
-  public Role() {
-  }
   
   public void addUser(User user){
     users.add(user);

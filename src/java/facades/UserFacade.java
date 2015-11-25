@@ -19,6 +19,7 @@ public class UserFacade {
 
     public UserFacade() {}
 
+    
     public User addUser(entity.User user) {
 
         try {
@@ -33,14 +34,47 @@ public class UserFacade {
         EntityManager em = emf.createEntityManager();
 
         // ToDo :: test if username and/or roles exist 
-        try {
-            em.getTransaction().begin();
-            em.merge(user); // <- em.merge() not em.persist() ????? 
-            em.getTransaction().commit();
-        } finally {
-            em.close();
-        }
-        return user;
+        
+
+        
+//        if(em.find(User.class, user.getUserName()) == null) {
+//                
+//                
+//        }
+        
+        
+            User newUser = new User();
+            try {
+                em.getTransaction().begin();
+
+                for (Role role : user.getRoles()) {
+
+                    Role DBrole = em.find( Role.class, role.getRoleName() );
+
+                    newUser.AddRole(DBrole);
+
+                    // if role doesn't exist, persist it
+                    if( DBrole == null ) {
+                        em.persist(role.getRoleName());
+                    } // End of if
+                } // End of for-each-loop
+
+                em.persist(newUser);
+                em.getTransaction().commit();
+
+            } finally {
+                em.close();
+            }
+        return newUser;
+        
+//        try {
+//            em.getTransaction().begin();
+//            em.merge(user); // <- em.merge() not em.persist() ????? 
+//            em.getTransaction().commit();
+//        } finally {
+//            em.close();
+//        }
+//        return user;
     } // End of method
 
     
